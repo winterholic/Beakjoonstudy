@@ -1,15 +1,6 @@
 A = input()
 B = input()
 
-"""while (B in A) :
-    result = A.replace(B, "")
-    A = result
-
-if (len(A) == 0) :
-    print("FRULA")
-else :
-    print(A)"""
-
 lenB = len(B)
 stack = []
 
