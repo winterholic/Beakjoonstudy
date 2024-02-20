@@ -1,6 +1,7 @@
 import sys
 input = sys.stdin.readline
 from itertools import combinations
+from collections import deque
 
 N, M = map(int, input().split())
 
@@ -11,19 +12,6 @@ for _ in range(M) :
     graph[a][b] = 1
     graph[b][a] = 1
 
-edgenum = [0] * (N + 1)
-
-for i in range(1, N + 1) :
-    for j in range(1, N + 1) :
-        if(graph[i][j] == 1) :
-            edgenum[i] += 1
-
-max_index = max(range(len(edgenum)), key=lambda i: edgenum[i])
-# print(edgenum)
-# print()
-# print(max_index)
-# print()
-
 # for i in range(N + 1) :
 #     for j in range(N + 1) :
 #         print(graph[i][j], end = " ")
@@ -33,40 +21,46 @@ combinations_list = list(combinations(range(1, N + 1), 2))
 #print(combinations_list)
 
 ans = 2100000000
-ans1 = -1
-ans2 = -1
+ans1 = 2100000000
+ans2 = 2100000000
+
+def BFS(visited, index) :
+    queue = deque([index])
+    flag = 0
+
+    while queue :
+        index = queue.popleft()
+        if (flag != 0) :
+            visited[index] += 1
+        flag = 1
+
+        for i in range(1, N + 1) :
+            if(visited[i] == 0 and graph[index][i] == 1) :
+                visited[i] += visited[index]
+                queue.append(i)
+
+    return visited
 
 for i in range(len(combinations_list)) :
     for1 = combinations_list[i][0]
     for2 = combinations_list[i][1]
-    if(for1 != max_index and for2 != max_index) :
-        continue
     #print(for1, for2)
     sumdata = 0
-    for j in range(1, N + 1) :
-        cur = j
-        visited = [0] * (N + 1)
-        times = 0
-        while True :
-            #print(cur, times)
-            visited[cur] = 1
-            #print(cur, for1, for2)
-            if(cur == for1 or cur == for2) :
-                sumdata += (times * 2)
-                break
-            flag = 0
-            for k in range(1, N + 1) :
-                if(graph[cur][k] == 1 and visited[k] == 0) :
-                    cur = k
-                    flag = 1
-                    break
-            times += 1
-            if(flag == 0) :
-                break
+    visitedtmp1 = [0] * (N + 1)
+    visited1 = BFS(visitedtmp1, for1)
+    visitedtmp2 = [0] * (N + 1)
+    visited2 = BFS(visitedtmp2, for2)
+
+    #print(visited1)
+    #print(visited2)
+
+    for i in range(1, N + 1) :
+        if(i != for1 and i != for2) :
+            sumdata += min(visited1[i], visited2[i]) * 2
+
+    #print(sumdata)
     
     if(sumdata < ans) :
-        ans = sumdata
-        ans1 = for1
-        ans2 = for2
+        ans, ans1, ans2 = sumdata, for1, for2
 
 print(ans1, ans2, ans)
