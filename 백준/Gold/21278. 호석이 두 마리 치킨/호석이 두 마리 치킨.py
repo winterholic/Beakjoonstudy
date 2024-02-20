@@ -24,19 +24,19 @@ ans = 2100000000
 ans1 = 2100000000
 ans2 = 2100000000
 
-def BFS(visited, index) :
+def BFS(index) :
     queue = deque([index])
-    flag = 0
+    visited = [0] * (N + 1)
+    visited[index] = 1
 
     while queue :
-        index = queue.popleft()
-        if (flag != 0) :
-            visited[index] += 1
-        flag = 1
+        x = queue.popleft()
 
         for i in range(1, N + 1) :
-            if(visited[i] == 0 and graph[index][i] == 1) :
-                visited[i] += visited[index]
+            if(visited[i] > 0) :
+                continue
+            if(graph[x][i] == 1) :
+                visited[i] = visited[x] + 1
                 queue.append(i)
 
     return visited
@@ -46,18 +46,16 @@ for i in range(len(combinations_list)) :
     for2 = combinations_list[i][1]
     #print(for1, for2)
     sumdata = 0
-    visitedtmp1 = [0] * (N + 1)
-    visited1 = BFS(visitedtmp1, for1)
-    visitedtmp2 = [0] * (N + 1)
-    visited2 = BFS(visitedtmp2, for2)
+    visited1 = BFS(for1)
+    visited2 = BFS(for2)
 
     #print(visited1)
     #print(visited2)
 
     for i in range(1, N + 1) :
         if(i != for1 and i != for2) :
-            sumdata += min(visited1[i], visited2[i]) * 2
-
+            sumdata += min(visited1[i] - 1, visited2[i] - 1) * 2
+    #print("!!", i, sumdata);
     #print(sumdata)
     
     if(sumdata < ans) :
