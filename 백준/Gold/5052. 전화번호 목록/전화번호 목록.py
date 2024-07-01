@@ -1,5 +1,5 @@
-# import sys
-# input = sys.stdin.readline
+import sys
+input = sys.stdin.readline
 
 T = int(input())
 
@@ -27,7 +27,7 @@ for i in range(T) :
     N = int(input())
     number = []
     for j in range(N) :
-        temp = list(input())
+        temp = list(input().rstrip())
         number.append(temp)
 
     number_dict = {}
@@ -42,6 +42,3 @@ for i in range(T) :
         print("YES")
     # print(number_dict)
     # print("00000000000000000000000000000000__",flag)
-
-
-{'9' : [{'1' : [{'1' : [{}, 0]}, 0]}, 0]}
